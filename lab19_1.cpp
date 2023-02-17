@@ -20,20 +20,55 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
-
+void importDataFromFile(string filename, vector<string>& names, vector<int>& scores, vector<char>& grades){
+    ifstream source;
+    source.open(filename.c_str());
+    string textline;
+    char name[100];
+    char format[] = "%[^:]: %d %d %d";
+    int a,b,c,sum;
+    while(getline(source,textline)){
+        const char *cText = textline.c_str();
+        sscanf(cText,format,name,&a,&b,&c);
+        sum = a+b+c;
+        names.push_back(name);
+        scores.push_back(sum);
+        grades.push_back(score2grade(sum));
+    }
+    source.close();
 }
 
-void getCommand(){
-
+void getCommand(string& command, string& key){
+    cout << "Please input your command: ";
+    string textline;
+    getline(cin,textline);
+    int lo = textline.find_first_of(" ");
+    command = textline.substr(0,lo);
+    key = textline.substr(lo+1);
 }
 
-void searchName(){
-
+void searchName(vector<string> names, vector<int> scores, vector<char> grades, string key){
+    cout << "---------------------------------\n";
+    for(unsigned int i = 0;i < names.size();i++){
+        if(key == toUpperStr(names[i])){
+            cout << names[i] << "'s score = " << scores[i] << endl;
+            cout << names[i] << "'s grade = " << grades[i] << endl;
+            cout << "---------------------------------\n";
+            return;
+        }
+    }
+    cout << "Cannot found.\n";
+    cout << "---------------------------------\n";
 }
 
-void searchGrade(){
-
+void searchGrade(vector<string> names, vector<int> scores, vector<char> grades, string key){
+    cout << "---------------------------------\n";
+    for(unsigned int i = 0;i < names.size();i++){
+        if(key[0] == grades[i]){
+            cout << names[i] << " (" << scores[i] << ")" << endl;
+        }
+    }
+    cout << "---------------------------------\n";
 }
 
 
